@@ -5,34 +5,50 @@ import Task from './task';
 function App() {
   const [tasks, setTasks] = useState([]);
   const [completedTasks, setCompletedTasks] = useState([]);
-  const descriptionRef = useRef();
+  const [taskTitle, setTaskTitle] = useState('');
+  const [taskDescription, setTaskDescription] = useState('');
+  const titleInputRef = useRef(null);
 
-  const addTask = (taskTitle, taskDescription) => {
-    if (taskTitle && taskDescription) {
-      setTasks(prevTasks => [...prevTasks, { title: taskTitle, description: taskDescription }]);
-      // Clear title and description inputs
-      document.getElementById("taskTitle").value = '';
-      document.getElementById("taskDescription").value = '';
-      document.getElementById("taskTitle").focus(); // Refocus on the title input
+  const addTask = () => {
+    const trimmedTitle = taskTitle.trim();
+    const trimmedDescription = taskDescription.trim();
+    
+    if (trimmedTitle) {
+      const newTask = {
+        id: Date.now(),
+        title: trimmedTitle,
+        description: trimmedDescription
+      };
+
+      setTasks(prev => [...prev, newTask]);
+      setTaskTitle('');
+      setTaskDescription('');
+      titleInputRef.current.focus();
     }
   };
-  
 
-  const completeTask = (taskIndex) => {
-    const taskToComplete = tasks[taskIndex];
-    setCompletedTasks(prevCompletedTasks => [...prevCompletedTasks, taskToComplete]);
-    setTasks(prevTasks => prevTasks.filter((task, index) => index !== taskIndex));
+  const completeTask = (taskId) => {
+    const task = tasks.find(t => t.id === taskId);
+    if (task) {
+      setCompletedTasks(prev => [...prev, task]);
+      setTasks(prev => prev.filter(t => t.id !== taskId));
+    }
   };
 
-  const deleteTask = (taskIndex, isCompleted) => {
-    if (isCompleted) {
-      setCompletedTasks(prevCompletedTasks =>
-        prevCompletedTasks.filter((task, index) => index !== taskIndex)
-      );
-    } else {
-      setTasks(prevTasks =>
-        prevTasks.filter((task, index) => index !== taskIndex)
-      );
+  const deleteTask = (taskId, isCompleted) => {
+    isCompleted 
+      ? setCompletedTasks(prev => prev.filter(t => t.id !== taskId))
+      : setTasks(prev => prev.filter(t => t.id !== taskId));
+  };
+
+  const handleKeyPress = (e, field) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (field === 'title' && taskTitle.trim()) {
+        document.getElementById("taskDescription").focus();
+      } else if (field === 'description') {
+        addTask();
+      }
     }
   };
 
@@ -44,62 +60,42 @@ function App() {
           type="text"
           id="taskTitle"
           placeholder="Enter task title"
-          onKeyPress={(event) => {
-            if (event.key === 'Enter') {
-              event.preventDefault(); // Prevent form submission
-              const taskTitle = event.target.value.trim();
-              descriptionRef.current.focus(); // Focus on the description input
-              if (taskTitle) {
-                // Skip adding task if the title is empty
-                const taskDescription = document.getElementById("taskDescription").value.trim();
-                addTask(taskTitle, taskDescription);
-              }
-            }
-          }}
+          value={taskTitle}
+          onChange={(e) => setTaskTitle(e.target.value)}
+          onKeyDown={(e) => handleKeyPress(e, 'title')}
+          ref={titleInputRef}
         />
         <input
           type="text"
           id="taskDescription"
           placeholder="Enter task description"
-          ref={descriptionRef}
-          onKeyPress={(event) => {
-            if (event.key === 'Enter') {
-              event.preventDefault(); // Prevent form submission
-              const taskDescription = event.target.value.trim();
-              const taskTitle = document.getElementById("taskTitle").value.trim();
-              addTask(taskTitle, taskDescription);
-            }
-          }}
+          value={taskDescription}
+          onChange={(e) => setTaskDescription(e.target.value)}
+          onKeyDown={(e) => handleKeyPress(e, 'description')}
         />
-        <button onClick={() => {
-          const taskTitle = document.getElementById("taskTitle").value.trim();
-          const taskDescription = document.getElementById("taskDescription").value.trim();
-          addTask(taskTitle, taskDescription);
-          document.getElementById("taskTitle").value = '';
-          document.getElementById("taskDescription").value = '';
-        }}>
+        <button onClick={addTask}>
           Add
         </button>
       </div>
       <ul id="todoList">
-        {tasks.map((task, index) => (
+        {tasks.map(task => (
           <Task
-            key={index}
+            key={task.id}
             taskTitle={task.title}
             taskDescription={task.description}
-            onCompleted={() => completeTask(index)}
-            onDelete={() => deleteTask(index, false)}
+            onCompleted={() => completeTask(task.id)}
+            onDelete={() => deleteTask(task.id, false)}
           />
         ))}
       </ul>
       <h2>Completed Tasks</h2>
       <ul id="completedList">
-        {completedTasks.map((task, index) => (
+        {completedTasks.map(task => (
           <Task
-            key={index}
+            key={task.id}
             taskTitle={task.title}
             taskDescription={task.description}
-            onDelete={() => deleteTask(index, true)}
+            onDelete={() => deleteTask(task.id, true)}
           />
         ))}
       </ul>
