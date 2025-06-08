@@ -1,70 +1,117 @@
-# Getting Started with Create React App
+# ✅ To-Do Web App with CI/CD (React + Docker + GitHub Actions + Render)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A simple yet production-ready **To-Do Web Application** built using **React**, containerized with **Docker**, and automatically deployed to **Render** using **GitHub Actions**. This project demonstrates a full DevOps pipeline—from code to live deployment—with versioned Docker images, continuous integration, and continuous delivery.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🔧 Tech Stack
 
-### `npm start`
+- **Frontend**: React
+- **Containerization**: Docker, DockerHub
+- **CI/CD Pipeline**: GitHub Actions
+- **Deployment**: Render
 
-Runs the app in the development mode.\
-Open [https://to-do-web-app-pratik.netlify.app/) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🚀 Live Demo & Docker
 
-### `npm test`
+- 🌐 **Live App**: [my-todo-app-latest.onrender.com](https://my-todo-app-latest.onrender.com/)  
+  (Backup: [Netlify Deployment](https://to-do-web-app-pratik.netlify.app/))
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- 📦 **DockerHub Image**: [pratikw123/my-todo-app](https://hub.docker.com/repository/docker/pratikw123/my-todo-app)
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 📸 Screenshots
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+| Description                     | Screenshot |
+|---------------------------------|------------|
+| ✅ Final Web App UI (Deployed)   | ![To-Do App Demo](./screenshots/to_do_app_Demo.png) |
+| 🔁 GitHub Actions CI/CD Build   | ![CI Build](./screenshots/github_action_build_to_do.png) |
+| 🔄 Render Deployment Log        | ![Render Logs](./screenshots/pull_build_to_do_app_render.png) |
+| 📦 DockerHub Image              | ![DockerHub Repo](./screenshots/docker_hub_to_do.png) |
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+## ⚙️ Local Setup & Docker
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```bash
+# 1. Clone the repository
+git clone https://github.com/pratikwayal01/To_Do_WebApp.git
+cd To_Do_WebApp
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+# 2. Build Docker image
+docker build -t todo-app .
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+# 3. Run the container
+docker run -p 3000:3000 todo-app
+````
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Now, open your browser and visit `http://localhost:3000`
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 🔄 CI/CD & Deployment Flow
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+This project uses a fully automated DevOps pipeline:
 
-### Code Splitting
+### 1️⃣ GitHub Actions Workflow
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+* On each push to the `main` branch:
 
-### Analyzing the Bundle Size
+  * React app is built.
+  * Docker image is created using the Dockerfile.
+  * Image is pushed to DockerHub (`pratikw123/my-todo-app`).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+📸 *See Screenshot:*
+![CI/CD Build](./screenshots/github_action_build_to_do.png)
 
-### Making a Progressive Web App
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### 2️⃣ Render Deployment
 
-### Advanced Configuration
+* Render is configured to auto-deploy from the Docker image.
+* After the image is pushed to DockerHub, Render:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+  * Pulls the latest image.
+  * Rebuilds and redeploys the app.
 
-### Deployment
+📸 *See Screenshot:*
+![Render Deployment Log](./screenshots/pull_build_to_do_app_render.png)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+---
 
-### `npm run build` fails to minify
+## 📦 DockerHub
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+You can also pull and run the latest version directly:
+
+```bash
+docker pull pratikw123/my-todo-app
+docker run -p 3000:3000 pratikw123/my-todo-app
+```
+
+📸 *See Screenshot:*
+![DockerHub Repo](./screenshots/docker_hub_to_do.png)
+
+---
+
+## 💡 Highlights
+
+* ⚛️ Built with clean, modular React components.
+* 🐳 Fully containerized with Docker.
+* 🔁 Seamless CI/CD integration using GitHub Actions.
+* ☁️ Automatically deployed via Docker image to Render.
+* 🚀 Ready for production with minimal configuration.
+
+---
+
+## 👨‍💻 Author
+
+**Pratik Wayal**
+Feel free to connect with me on [LinkedIn](https://www.linkedin.com/in/pratikwayal/) or check out more of my projects on [GitHub](https://github.com/pratikwayal01).
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](https://opensource.org/license/mit).
